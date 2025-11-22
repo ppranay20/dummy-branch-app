@@ -1,5 +1,10 @@
 # Secrets
 .env
+.env.dev
+.env.stage
+.env.staging
+.env.prod
+.env.production
 certs/
 *.key
 *.crt

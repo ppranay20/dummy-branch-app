@@ -77,9 +77,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: type=ref,event=push
           labels: type=ref,event=push
           tags: |
+            type=ref,event=push
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
       

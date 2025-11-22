@@ -1,0 +1,12 @@
+# Secrets
+.env
+certs/
+*.key
+*.crt
+*.pem
+
+# Python
+venv/
+env/
+__pycache__/
+*.pyc

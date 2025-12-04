@@ -1,15 +1,15 @@
 # Flask Microloans API
 
-A production-ready REST API for microloans, fully containerized with Docker. It features a complete DevOps workflow including Nginx SSL termination, multi-environment orchestration (Dev/Stage/Prod), and automated CI/CD with security scanning.
+A production-ready REST API for microloans, fully containerized with Docker. It features a complete DevOps workflow including Nginx SSL termination, multi-environment orchestration (Dev/Stage/Prod), and automated CI/CD with security scanning .
 
 ## 🏗 Architecture
 
 The system uses a reverse-proxy architecture to handle SSL termination and route traffic securely to the application layer.
 
-![Architecture](assets/architecture.png) 
-
+![Architecture](assets/architecture.png)
 
 **Flow Explanation:**
+
 1. **Client** sends HTTPS request to `https://branchloans.com`
 2. **Nginx** terminates SSL, validates certificate, forwards to Flask API
 3. **Flask API** validates request using Pydantic schemas
@@ -49,7 +49,7 @@ microloans-api/
 │   └── nginx.conf               # SSL termination, proxy rules
 │
 ├── 📁 .github/workflows/        # CI/CD automation
-│   └── ci-cd.yml               
+│   └── ci-cd.yml
 │
 ├── 📁 certs/                    # SSL certificates (gitignored)
 │   ├── branchloans.com.crt      # Self-signed certificate
@@ -69,17 +69,18 @@ microloans-api/
 
 ## 🛠 Tech Stack
 
-* **Language:** Python 3.11
-* **Frameworks:** Flask, SQLAlchemy (ORM), Pydantic (Validation), Alembic (Migrations)
-* **Database:** PostgreSQL 16
-* **Infrastructure:** Docker, Docker Compose
-* **Routing:** Nginx (Reverse Proxy & SSL Termination)
-* **DevOps:** GitHub Actions (CI/CD), GitHub Container Registry (GHCR)
-* **Security:** Trivy (Container Vulnerability Scanning)
+- **Language:** Python 3.11
+- **Frameworks:** Flask, SQLAlchemy (ORM), Pydantic (Validation), Alembic (Migrations)
+- **Database:** PostgreSQL 16
+- **Infrastructure:** Docker, Docker Compose
+- **Routing:** Nginx (Reverse Proxy & SSL Termination)
+- **DevOps:** GitHub Actions (CI/CD), GitHub Container Registry (GHCR)
+- **Security:** Trivy (Container Vulnerability Scanning)
 
 ## 📡 Local Setup Guide
 
 ### 1. Prerequisites
+
 - Docker Desktop installed and running.
 - Git Bash (Windows) or Terminal (Mac/Linux).
 - OpenSSL (usually pre-installed).
@@ -87,6 +88,7 @@ microloans-api/
 ---
 
 ### 2. Clone The Repository
+
 Run the following:
 
 ```bash
@@ -97,6 +99,7 @@ cd microloans-api
 ---
 
 ### 3. Generate SSL Certificate
+
 Run the following:
 
 ```bash
@@ -108,6 +111,7 @@ This will generate a self-signed SSL certificate for `branchloans.com` and saved
 ---
 
 ### 4. DNS Configuration (Hosts File)
+
 Map `branchloans.com` to localhost.
 
 **Windows:**
@@ -139,10 +143,12 @@ cp .env.prod.example .env.prod
 Each environment file contains the following variables:
 
 **Environment:**
+
 - **`FLASK_ENV`** - Specifies the environment (`development`, `staging`, or `production`)
 - **`LOG_LEVEL`** - Logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`)
 
 **Database Configuration:**
+
 - **`POSTGRES_USER`** - PostgreSQL username
 - **`POSTGRES_PASSWORD`** - PostgreSQL password
 - **`POSTGRES_DB`** - Database name
@@ -153,6 +159,7 @@ Each environment file contains the following variables:
 - **`DB_VOLUME`** - Volume mount for database persistence (`none` for dev, path for prod)
 
 **API Configuration:**
+
 - **`API_WORKERS`** - Number of Gunicorn workers
 - **`API_RELOAD`** - Auto-reload flag (`--reload` for dev, empty for prod)
 - **`API_LOG_LEVEL`** - API logging level (`debug`, `info`, `warning`, `error`)
@@ -163,20 +170,20 @@ Each environment file contains the following variables:
 
 Here is a breakdown of how the application behavior changes across environments:
 
-| Variable            | Development      | Staging          | Production       | Purpose |
-|---------------------|------------------|------------------|------------------|---------|
-| **`FLASK_ENV`**     | `development`    | `staging`        | `production`     | Sets Flask runtime mode |
-| **`LOG_LEVEL`**     | `DEBUG`          | `INFO`           | `WARNING`        | Controls verbosity of logs |
-| **`API_PORT`**      | `8001`           | `8000`           | `8002`           | Avoids port conflicts when running multiple envs |
-| **`API_WORKERS`**   | `2`              | `4`              | `8`              | Scales worker processes based on load |
-| **`API_RELOAD`**    | `--reload`       | _(empty)_        | _(empty)_        | Dev needs instant feedback, Prod needs stability |
-| **`API_LOG_LEVEL`** | `debug`          | `info`           | `warning`        | API-specific logging verbosity |
-| **`CODE_MOUNT`**    | `.:/app`         | _(empty)_        | _(empty)_        | Dev mounts local code for hot-reload, Prod uses built image |
-| **`DB_PORT`**       | `5433`           | `5432`           | `5434`           | Separate database ports per environment |
-| **`DB_MEMORY_LIMIT`** | `256m`         | `512m`           | `1g`             | Simulates real resource constraints |
-| **`DB_CPU_LIMIT`**  | `1.0`            | `2.0`            | `4.0`            | CPU allocation scales with environment |
-| **`DB_POOL_SIZE`**  | `5`              | `10`             | `20`             | Connection pool size increases with load |
-| **`DB_VOLUME`**     | `db_data_dev`    | `db_data_stage`  | `db_data_prod`   | Keeps data separate and persistent per environment |
+| Variable              | Development   | Staging         | Production     | Purpose                                                     |
+| --------------------- | ------------- | --------------- | -------------- | ----------------------------------------------------------- |
+| **`FLASK_ENV`**       | `development` | `staging`       | `production`   | Sets Flask runtime mode                                     |
+| **`LOG_LEVEL`**       | `DEBUG`       | `INFO`          | `WARNING`      | Controls verbosity of logs                                  |
+| **`API_PORT`**        | `8001`        | `8000`          | `8002`         | Avoids port conflicts when running multiple envs            |
+| **`API_WORKERS`**     | `2`           | `4`             | `8`            | Scales worker processes based on load                       |
+| **`API_RELOAD`**      | `--reload`    | _(empty)_       | _(empty)_      | Dev needs instant feedback, Prod needs stability            |
+| **`API_LOG_LEVEL`**   | `debug`       | `info`          | `warning`      | API-specific logging verbosity                              |
+| **`CODE_MOUNT`**      | `.:/app`      | _(empty)_       | _(empty)_      | Dev mounts local code for hot-reload, Prod uses built image |
+| **`DB_PORT`**         | `5433`        | `5432`          | `5434`         | Separate database ports per environment                     |
+| **`DB_MEMORY_LIMIT`** | `256m`        | `512m`          | `1g`           | Simulates real resource constraints                         |
+| **`DB_CPU_LIMIT`**    | `1.0`         | `2.0`           | `4.0`          | CPU allocation scales with environment                      |
+| **`DB_POOL_SIZE`**    | `5`           | `10`            | `20`           | Connection pool size increases with load                    |
+| **`DB_VOLUME`**       | `db_data_dev` | `db_data_stage` | `db_data_prod` | Keeps data separate and persistent per environment          |
 
 ---
 
@@ -193,12 +200,14 @@ docker compose --env-file .env.dev up --build
 ```
 
 **What happens:**
+
 - API runs on port `8001` with auto-reload enabled
 - Code changes are instantly reflected (no rebuild needed)
 - Database runs on port `5433` with minimal resources
 - Verbose debug logging for troubleshooting
 
 **Access the application:**
+
 - API: `https://branchloans.com`
 - Health check: `https://branchloans.com/health`
 
@@ -213,12 +222,14 @@ docker compose --env-file .env.stage up --build
 ```
 
 **What happens:**
+
 - API runs on port `8000` without auto-reload
 - Uses built Docker image (not mounted code)
 - Database runs on port `5432` with moderate resources
 - Info-level logging
 
 **Access the application:**
+
 - API: `https://branchloans.com`
 - Health check: `https://branchloans.com/health`
 
@@ -233,12 +244,14 @@ docker compose --env-file .env.prod up --build
 ```
 
 **What happens:**
+
 - API runs on port `8002` with maximum workers
 - Uses production-optimized Docker image
 - Database runs on port `5434` with full resources
 - Warning-level logging only
 
 **Access the application:**
+
 - API: `https://branchloans.com`
 - Health check: `https://branchloans.com/health`
 
@@ -246,8 +259,8 @@ docker compose --env-file .env.prod up --build
 
 ### **Important Notes**
 
-> [NOTE]
-> **No manual migrations needed!** The `scripts/entrypoint.sh` script automatically handles database migrations on startup. It will:
+> [NOTE] > **No manual migrations needed!** The `scripts/entrypoint.sh` script automatically handles database migrations on startup. It will:
+>
 > - Wait for the database to be ready
 > - Run Alembic migrations (`alembic upgrade head`)
 > - Seed initial data if needed
@@ -255,12 +268,14 @@ docker compose --env-file .env.prod up --build
 
 > [TIP]
 > To run in detached mode (background), add the `-d` flag:
+>
 > ```bash
 > docker compose --env-file .env.dev up --build -d
 > ```
 
 > [TIP]
 > To stop the application:
+>
 > ```bash
 > docker compose --env-file .env.dev down
 > ```
@@ -268,6 +283,7 @@ docker compose --env-file .env.prod up --build
 ---
 
 **Access the application:**
+
 - API: `https://branchloans.com`
 - Health check: `https://branchloans.com/health`
 
@@ -282,12 +298,14 @@ docker compose --env-file .env.stage up --build
 ```
 
 **What happens:**
+
 - API runs on port `8000` without auto-reload
 - Uses built Docker image (not mounted code)
 - Database runs on port `5432` with moderate resources
 - Info-level logging
 
 **Access the application:**
+
 - API: `https://branchloans.com`
 - Health check: `https://branchloans.com/health`
 
@@ -302,12 +320,14 @@ docker compose --env-file .env.prod up --build
 ```
 
 **What happens:**
+
 - API runs on port `8002` with maximum workers
 - Uses production-optimized Docker image
 - Database runs on port `5434` with full resources
 - Warning-level logging only
 
 **Access the application:**
+
 - API: `https://branchloans.com`
 - Health check: `https://branchloans.com/health`
 
@@ -315,8 +335,8 @@ docker compose --env-file .env.prod up --build
 
 ### **Important Notes**
 
-> [NOTE]
-> **No manual migrations needed!** The `scripts/entrypoint.sh` script automatically handles database migrations on startup. It will:
+> [NOTE] > **No manual migrations needed!** The `scripts/entrypoint.sh` script automatically handles database migrations on startup. It will:
+>
 > - Wait for the database to be ready
 > - Run Alembic migrations (`alembic upgrade head`)
 > - Seed initial data if needed
@@ -324,28 +344,30 @@ docker compose --env-file .env.prod up --build
 
 > [TIP]
 > To run in detached mode (background), add the `-d` flag:
+>
 > ```bash
 > docker compose --env-file .env.dev up --build -d
 > ```
 
 > [TIP]
 > To stop the application:
+>
 > ```bash
 > docker compose --env-file .env.dev down
 > ```
 
-
 ---
-
 
 ## 📚 API
 
 ### Endpoints
 
 #### `GET /health`
+
 Health check endpoint (returns `200 OK` if the database is connected, `503 Service Unavailable` otherwise).
 
 **Response:**
+
 ```json
 {
   "status": "ok"
@@ -353,30 +375,32 @@ Health check endpoint (returns `200 OK` if the database is connected, `503 Servi
 ```
 
 #### `GET /api/loans`
+
 List all loans.
 
 **Response:**
+
 ```json
 [
   {
     "id": "00000000-0000-0000-0000-000000000001",
     "borrower_id": "usr_kenya_001",
-    "amount": 12500.00,
+    "amount": 12500.0,
     "currency": "KES",
     "status": "pending",
     "term_months": 6,
-    "interest_rate_apr": 28.00,
+    "interest_rate_apr": 28.0,
     "created_at": "2025-01-01T00:00:00Z",
     "updated_at": "2025-01-01T00:00:00Z"
   },
   {
     "id": "00000000-0000-0000-0000-000000000002",
     "borrower_id": "usr_india_002",
-    "amount": 50000.00,
+    "amount": 50000.0,
     "currency": "INR",
     "status": "approved",
     "term_months": 12,
-    "interest_rate_apr": 24.00,
+    "interest_rate_apr": 24.0,
     "created_at": "2025-01-01T00:00:00Z",
     "updated_at": "2025-01-01T00:00:00Z"
   }
@@ -384,40 +408,45 @@ List all loans.
 ```
 
 #### `GET /api/loans/:id`
+
 Get specific loan by ID.
 
 **Example:** `GET /api/loans/00000000-0000-0000-0000-000000000001`
 
 **Response:**
+
 ```json
 {
   "id": "00000000-0000-0000-0000-000000000001",
   "borrower_id": "usr_kenya_001",
-  "amount": 12500.00,
+  "amount": 12500.0,
   "currency": "KES",
   "status": "pending",
   "term_months": 6,
-  "interest_rate_apr": 28.00,
+  "interest_rate_apr": 28.0,
   "created_at": "2025-01-01T00:00:00Z",
   "updated_at": "2025-01-01T00:00:00Z"
 }
 ```
 
 #### `POST /api/loans`
+
 Create new loan application.
 
 **Request:**
+
 ```json
 {
   "borrower_id": "usr_philippines_006",
-  "amount": 35000.00,
+  "amount": 35000.0,
   "currency": "PHP",
   "term_months": 9,
-  "interest_rate_apr": 25.50
+  "interest_rate_apr": 25.5
 }
 ```
 
 **Validation Rules:**
+
 - `amount`: 0 < amount ≤ 50,000
 - `currency`: 3-character code (e.g., INR, KES, NGN, VND, PHP)
 - `term_months`: ≥ 1
@@ -427,25 +456,27 @@ Create new loan application.
 {
   "id": "generated-uuid",
   "borrower_id": "usr_philippines_006",
-  "amount": 35000.00,
+  "amount": 35000.0,
   "currency": "PHP",
   "status": "pending",
   "term_months": 9,
-  "interest_rate_apr": 25.50,
+  "interest_rate_apr": 25.5,
   "created_at": "2025-01-01T00:00:00Z",
   "updated_at": "2025-01-01T00:00:00Z"
 }
 ```
 
 #### `GET /api/stats`
+
 Get loan statistics aggregated by status and currency.
 
 **Response:**
+
 ```json
 {
   "total_loans": 5,
-  "total_amount": 123900.00,
-  "avg_amount": 24780.00,
+  "total_amount": 123900.0,
+  "avg_amount": 24780.0,
   "by_status": {
     "pending": 1,
     "approved": 1,
@@ -474,7 +505,7 @@ The project uses **GitHub Actions** for a secure, automated release pipeline. Th
 
 ### **Pipeline Architecture**
 
-We use an **Artifact-Based Workflow** to ensure security. Instead of pushing to the registry and *then* scanning (which risks exposing bad code), we build locally, scan locally, and only push if safe.
+We use an **Artifact-Based Workflow** to ensure security. Instead of pushing to the registry and _then_ scanning (which risks exposing bad code), we build locally, scan locally, and only push if safe.
 
 ![CI/CD Pipeline Flow](assets/cicd.png)
 
@@ -513,7 +544,6 @@ Sensitive data (API keys, DB passwords) is never committed to code.
 - **Runtime:** They are injected as environment variables only during the specific steps that need them
 - **Logs:** GitHub automatically masks secrets in logs (displays as `***`)
 
-
 # 📐 Design Decisions & Trade-offs
 
 This document outlines the architectural choices made during the development of the Microloans API, the reasoning behind them, and the trade-offs considered.
@@ -523,51 +553,65 @@ This document outlines the architectural choices made during the development of 
 ## 1. Infrastructure & Orchestration
 
 ### Single `docker-compose.yml` for All Environments
+
 Instead of maintaining separate files (`docker-compose.dev.yml`, `prod.yml`), we use a single template file and inject configuration via Environment Variables.
-* **Why:** Adheres to the **DRY (Don't Repeat Yourself)** principle. It ensures the structural architecture (network, volumes, dependencies) remains identical across Dev, Stage, and Prod, minimizing "it works on my machine" issues.
-* **Trade-off:** The `docker-compose.yml` becomes slightly more complex to read due to the heavy use of `${VARIABLE}` syntax.
+
+- **Why:** Adheres to the **DRY (Don't Repeat Yourself)** principle. It ensures the structural architecture (network, volumes, dependencies) remains identical across Dev, Stage, and Prod, minimizing "it works on my machine" issues.
+- **Trade-off:** The `docker-compose.yml` becomes slightly more complex to read due to the heavy use of `${VARIABLE}` syntax.
 
 ### Port Isolation Strategy
+
 We assigned distinct host ports for every environment (Dev: `8001`, Stage: `8000`, Prod: `8002`) and distinct Database ports.
-* **Why:** This allows all three environments to run **simultaneously** on the same machine without port collisions. It enables a developer to fix a bug in Dev while the Staging environment is being tested by QA on the same host.
-* **Trade-off:** Requires manual port management and strict documentation so developers know which port belongs to which environment.
+
+- **Why:** This allows all three environments to run **simultaneously** on the same machine without port collisions. It enables a developer to fix a bug in Dev while the Staging environment is being tested by QA on the same host.
+- **Trade-off:** Requires manual port management and strict documentation so developers know which port belongs to which environment.
 
 ### Nginx Reverse Proxy
+
 We placed Nginx in front of the Python application container.
-* **Why:** Python WSGI servers (Gunicorn) are not designed to face the open internet. Nginx handles SSL termination efficiently, buffers slow clients (Slowloris protection), and serves static assets.
-* **Trade-off:** Adds complexity to the local setup (requires generating certificates and mapping the `hosts` file) compared to accessing the Flask app directly.
+
+- **Why:** Python WSGI servers (Gunicorn) are not designed to face the open internet. Nginx handles SSL termination efficiently, buffers slow clients (Slowloris protection), and serves static assets.
+- **Trade-off:** Adds complexity to the local setup (requires generating certificates and mapping the `hosts` file) compared to accessing the Flask app directly.
 
 ---
 
 ## 2. Configuration Management
 
 ### Environment Variable Injection (.env files)
+
 We use specific files (`.env.dev`, `.env.prod`) loaded at runtime.
-* **Why:** Adheres to the **12-Factor App** methodology. Config is separated strictly from code.
-* **Trade-off:** Developers must manually create these files from `.env.example` templates, which adds a setup step.
+
+- **Why:** Adheres to the **12-Factor App** methodology. Config is separated strictly from code.
+- **Trade-off:** Developers must manually create these files from `.env.example` templates, which adds a setup step.
 
 ### Helper Scripts (`entrypoint.sh`, `generate-cert.sh`)
+
 We automated setup tasks using Bash scripts.
-* **Why:** **Developer Experience (DX).** It abstracts away complex commands.
-    * `generate-cert.sh`: Prevents users from needing to memorize long OpenSSL commands.
-    * `entrypoint.sh`: Ensures migrations and seeding happen automatically on startup, preventing "Table not found" errors.
-* **Trade-off:** "Magic" scripts can sometimes hide errors or make it harder for juniors to understand exactly what commands are being run under the hood.
+
+- **Why:** **Developer Experience (DX).** It abstracts away complex commands.
+  - `generate-cert.sh`: Prevents users from needing to memorize long OpenSSL commands.
+  - `entrypoint.sh`: Ensures migrations and seeding happen automatically on startup, preventing "Table not found" errors.
+- **Trade-off:** "Magic" scripts can sometimes hide errors or make it harder for juniors to understand exactly what commands are being run under the hood.
 
 ### Strict `.gitignore` and `.dockerignore`
+
 We explicitly ignore all `.env` files, certificates, and virtual environments.
-* **Why:** **Security & Performance.**
-    * Security: Prevents accidental commit of secrets/keys to GitHub.
-    * Performance: `.dockerignore` prevents the `venv` folder and local certificates from bloating the Docker build context.
-* **Trade-off:** New team members must strictly follow the `.env.example` guide to get started, as they cannot "clone and run" without configuration.
+
+- **Why:** **Security & Performance.**
+  - Security: Prevents accidental commit of secrets/keys to GitHub.
+  - Performance: `.dockerignore` prevents the `venv` folder and local certificates from bloating the Docker build context.
+- **Trade-off:** New team members must strictly follow the `.env.example` guide to get started, as they cannot "clone and run" without configuration.
 
 ---
 
 ## 3. CI/CD Pipeline Architecture
 
 ### Artifact-Based Workflow (Build -> Tar -> Scan -> Push)
+
 Instead of pushing to the registry and then scanning, we build the image locally, save it as a `.tar` artifact, scan that file, and only push if it passes.
-* **Why:** **Zero-Trust Security.** This guarantees that no vulnerability ever reaches the registry. It also ensures "Binary Equality"—the exact bits we scanned are the exact bits we push.
-* **Trade-off:** The pipeline is slower. Uploading and downloading large `.tar` artifacts between GitHub Actions jobs consumes time and bandwidth compared to a direct push.
+
+- **Why:** **Zero-Trust Security.** This guarantees that no vulnerability ever reaches the registry. It also ensures "Binary Equality"—the exact bits we scanned are the exact bits we push.
+- **Trade-off:** The pipeline is slower. Uploading and downloading large `.tar` artifacts between GitHub Actions jobs consumes time and bandwidth compared to a direct push.
 
 ---
 
@@ -576,9 +620,9 @@ Instead of pushing to the registry and then scanning, we build the image locally
 If this project were to scale, I would implement the following:
 
 1.  **Secret Management Vault:**
-    * Currently, secrets are injected via GitHub Secrets. For a larger team, I would use **AWS Secrets Manager** to rotate keys automatically.
+    - Currently, secrets are injected via GitHub Secrets. For a larger team, I would use **AWS Secrets Manager** to rotate keys automatically.
 2.  **Kubernetes (K8s):**
-    * If traffic increased significantly, I would migrate from Docker Compose to Kubernetes to utilize auto-scaling and zero-downtime deployments (Rolling Updates).
+    - If traffic increased significantly, I would migrate from Docker Compose to Kubernetes to utilize auto-scaling and zero-downtime deployments (Rolling Updates).
 
 ## 🔧 Troubleshooting
 
@@ -586,11 +630,13 @@ If this project were to scale, I would implement the following:
 <summary><strong>Click to view Common Fixes</strong></summary>
 
 ### 1. "Bind for 0.0.0.0:5432 failed"
-* **Cause:** Local Postgres is running.
-* **Fix:** Stop the local service (`sudo service postgresql stop` or Task Manager).
+
+- **Cause:** Local Postgres is running.
+- **Fix:** Stop the local service (`sudo service postgresql stop` or Task Manager).
 
 ### 2. Browser Security Warning
-* **Cause:** Self-signed certificates.
-* **Fix:** Click "Advanced" -> "Proceed to branchloans.com".
+
+- **Cause:** Self-signed certificates.
+- **Fix:** Click "Advanced" -> "Proceed to branchloans.com".
 
 </details>
